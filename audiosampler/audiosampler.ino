@@ -8,6 +8,9 @@
 #define CLOCK_GPIO_OUT 51
 #define BUFFER_QUEUE_LENGTH 5
 
+#define ADC_CHANNEL_MIC 2
+#define ADC_SAMPLE_RATE 44100
+
 QueueHandle_t xBufferQueue;
 
 inline void initPins(){
@@ -30,8 +33,8 @@ void adc_full(uint16_t *readyBuffer, uint16_t size){
  */
 void BufferHandlerTask(void *arg){
   ADCSampler.init();
-  ADCSampler.setChannel(2);
-  ADCSampler.setSamplingFrequency(44100);
+  ADCSampler.setChannel(ADC_CHANNEL_MIC);
+  ADCSampler.setSamplingFrequency(ADC_SAMPLE_RATE);
   ADCSampler.setInterruptCallback(adc_full);
   ADCSampler.reset();
   ADCSampler.start();
