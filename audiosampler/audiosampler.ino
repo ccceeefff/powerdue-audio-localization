@@ -16,8 +16,6 @@ inline void togglePin(int state){
 
 void adc_full(uint16_t *readyBuffer, uint16_t size){
   togglePin(!pinState);
-  SerialUSB.print("full: ");
-  SerialUSB.println(micros());
 }
 
 void setup(){
