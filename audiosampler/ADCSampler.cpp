@@ -131,10 +131,20 @@ adc_callback ADCSamplerClass::getInterruptCallback(){
   return _callback;
 }
 
+uint16_t *ADCSamplerClass::getBufferAtIndex(int8_t index){
+  if(index < 0){  // wrap around incase of negative index
+    index += NUM_BUFFERS;
+  }
+  return _sampleBuffers[index%NUM_BUFFERS];
+}
+
 void ADCSamplerClass::bufferFullInterrupt(){
   if(this->_callback != NULL){
-    this->_callback(&_sampleBuffers[_currentBufferIndex][0], 
-      BUFFER_SIZE);
+    this->_callback(
+      _currentBufferIndex,
+      &_sampleBuffers[_currentBufferIndex][0], 
+      BUFFER_SIZE
+    );
   }
   // increment _currentBufferIndex
   _currentBufferIndex = (_currentBufferIndex+1)%NUM_BUFFERS;

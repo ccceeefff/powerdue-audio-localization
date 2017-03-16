@@ -16,7 +16,7 @@
  * (i.e. delegate the action to a task via posting to a queue)
  */
 
-typedef void (*adc_callback)(uint16_t *readyBuffer, uint16_t size);
+typedef void (*adc_callback)(uint8_t index, uint16_t *readyBuffer, uint16_t size);
 
 class ADCSamplerClass
 {
@@ -33,6 +33,8 @@ class ADCSamplerClass
     
     void setInterruptCallback(adc_callback callback);
     adc_callback getInterruptCallback();
+    
+    uint16_t *getBufferAtIndex(int8_t index);
   
   public: // protected methods - do not call these directly
     ADCSamplerClass();
