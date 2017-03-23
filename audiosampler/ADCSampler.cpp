@@ -3,6 +3,8 @@
 #include <Arduino.h>
 
 #define INSTRUMENT_CLOCK_RATE 84000000
+#define DEFAULT_CHANNEL A0
+#define DEFAULT_SAMPLING_FREQ 44100
 
 ADCSamplerClass::ADCSamplerClass(void){
   _channel = DEFAULT_CHANNEL;  // by default

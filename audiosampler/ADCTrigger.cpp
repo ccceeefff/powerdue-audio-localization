@@ -11,7 +11,7 @@ ADCTrigger::ADCTrigger(){
 }
 
 void ADCTrigger::feed(uint16_t *buffer, uint16_t len){
-  uint32_t t = micros();
+  // uint32_t t = micros();
   
   // get these before updating them
   float meanEnergy = getEnergyMean();
@@ -29,7 +29,7 @@ void ADCTrigger::feed(uint16_t *buffer, uint16_t len){
     }
   }
   
-  SerialUSB2.println(micros() - t);
+  // SerialUSB2.println(micros() - t);
 }
 
 bool ADCTrigger::isTriggered(){

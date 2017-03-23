@@ -1,10 +1,7 @@
 #ifndef _ADCTRIGGER_H
 #define _ADCTRIGGER_H
 
-#include <inttypes.h>
-
-#define WINDOW_COUNT 8
-#define MIN_WINDOW_COUNT 24
+#include "ADCConfig.h"
 
 class ADCTrigger
 {

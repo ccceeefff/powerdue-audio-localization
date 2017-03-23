@@ -1,14 +1,7 @@
 #ifndef _SAMPLER_H
 #define _SAMPLER_H
 
-#include <inttypes.h>
-
-#define NUM_BUFFERS   8
-#define BUFFER_SIZE   256
-#define BYTES_PER_SAMPLE 2
-
-#define DEFAULT_CHANNEL A0
-#define DEFAULT_SAMPLING_FREQ 44100
+#include "ADCConfig.h"
 
 /**
  * WARNING: This callback runs in an ISR context.
