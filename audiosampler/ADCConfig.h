@@ -4,16 +4,27 @@
 #include <inttypes.h>
 
 /*
+ * Device Parameters
+ */
+
+#define DEVICE_ID "PDue0002"    // use this to uniquely identify your device
+
+/*
  * Application Parameters
  */
 
 // update these
-#define WIFI_SSID "PowerDue"
-#define WIFI_PASS "powerdue"
-#define SERVER_IP "10.230.12.1"
+// #define WIFI_SSID "PowerDue"
+// #define WIFI_PASS "powerdue"
+// #define SERVER_IP "10.230.12.1"
+
+#define WIFI_SSID "YouGotMe"
+#define WIFI_PASS "y0ug0tmeg00d"
+#define SERVER_IP "192.168.1.9"
 
 #define CLOCK_GPIO_OUT 51
 #define BUFFER_QUEUE_LENGTH 8
+#define BUFFERS_TO_SEND 8
 
 /*
  * Clock parameters
@@ -32,7 +43,8 @@ typedef uint64_t tstamp_t;
 
 #if MASTER_CLOCK == 0
   // If this is a slave clock, this must be defined properly
-  #define MASTER_CLOCK_IP "10.230.12.8"  // e.g. "10.230.12.10" ?
+  // #define MASTER_CLOCK_IP "10.230.12.8"  // e.g. "10.230.12.10" ?
+  #define MASTER_CLOCK_IP "192.168.1.15"  // e.g. "10.230.12.10" ?
 #endif
 
 // Time period between synchronization trials (in milliseconds)
@@ -42,8 +54,8 @@ typedef uint64_t tstamp_t;
  *  ADCSampler parameters
  */
 
-#define NUM_BUFFERS   8
-#define BUFFER_SIZE   256
+#define NUM_BUFFERS   16
+#define BUFFER_SIZE   128
 #define BYTES_PER_SAMPLE 2
 
 #define ADC_CHANNEL_MIC 2       // mic is connected to A2

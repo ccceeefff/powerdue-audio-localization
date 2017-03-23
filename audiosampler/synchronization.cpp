@@ -114,7 +114,7 @@ void vNtpSlaveReceiveTask(void *arg){
     SerialUSB2.print(" Delay: ");
     SerialUSB2.println(delay);
     
-    if(delay < 1000){
+    if(delay < 400){
       ADCClock.addOffset(offset);
     }
   }
