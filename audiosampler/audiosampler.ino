@@ -41,9 +41,8 @@ inline void initPacket(){
     for(int i=0; i < DEVICE_ID_LENGTH; i++){
       capturedEvent[p].deviceID[i] = DEVICE_ID[i];
     }
-    for(int i=0; i < RESERVED_SPACE; i++){
-      capturedEvent[p].reserved[i] = 0;   // clear out the reserved space
-    }
+    capturedEvent[p].clockOffset = 0;
+    capturedEvent[p].networkDelay = 0;
     capturedEvent[p].samplingFrequency = ADC_SAMPLE_RATE;  
     capturedEvent[p].pktFooter = EVENT_PACKET_FOOTER;
   }  
@@ -120,6 +119,10 @@ void BufferHandlerTask(void *arg){
           }
 
           capturedEvent[currPacket].timestamp = tstamps[ind];
+          // add NTP information to allow estimation of errors offline
+          capturedEvent[currPacket].clockOffset = ADCClock.getOffset();
+          capturedEvent[currPacket].networkDelay = ADCClock.getNetworkDelay();
+          
           // capture the previous buffer into the packet
           memcpy( 
                   &(capturedEvent[currPacket].samples[BUFFER_SIZE * (BUFFERS_TO_SEND-bufCount)]), 
