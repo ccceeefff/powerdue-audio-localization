@@ -44,6 +44,7 @@
  *  ADCSampler parameters
  */
  
+// TODO: Modify the parameters below to suit your application needs
 #define ADC_SAMPLE_RATE 1000    // Sampling Rate in Hz of the ADC Sampler
 
 #define NUM_BUFFERS   8         // How many buffers should the ADC Sampler keep track of?
