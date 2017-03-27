@@ -21,12 +21,16 @@ class ADCClockClass
     void reset();   // resets the counter to 0
     
     void tick();    // increment the clock by 1 major tick
-    void addOffset(int offset);   // offset clock by N samples
     
     // returns time in number of samples taken since epoch (includes offset)
     tstamp_t getTime();
     uint32_t getMajorTicks();
     uint16_t getMinorTicks();
+    
+    // NTP details
+    void addOffset(int offset, int delay);   // offset clock by N samples
+    int getOffset();        // get current NTP offset
+    int getNetworkDelay();  // get network delay associated with offset
     
   public: // protected, do not use externally to this class
     ADCClockClass(void);
@@ -34,6 +38,7 @@ class ADCClockClass
   private:
     uint16_t _resolution;
     int _offset;  // offset from reference clock
+    int _delay;   // network delay associated with offset
     uint32_t _majorTicks;
 };
 

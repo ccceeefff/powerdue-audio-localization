@@ -28,8 +28,17 @@ void ADCClockClass::tick(){
   _majorTicks++;
 }
 
-void ADCClockClass::addOffset(int offset){
+void ADCClockClass::addOffset(int offset, int delay){
   _offset += offset;
+  _delay = delay;
+}
+
+int ADCClockClass::getOffset(){
+  return _offset;
+}
+
+int ADCClockClass::getNetworkDelay(){
+  return _delay;
 }
 
 uint64_t ADCClockClass::getTime(){

@@ -120,7 +120,7 @@ void vNtpSlaveReceiveTask(void *arg){
     
     // adjust the clock based on computed offset an delay
     // TODO: how do we choose when to adjust our clock?
-    ADCClock.addOffset(offset);
+    ADCClock.addOffset(offset, delay);
   }
 }
 
