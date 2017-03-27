@@ -1,11 +1,11 @@
 #include "synchronization.h"
 
+#include "debug.h"
 #include "ADCClock.h"
 
 #include <assert.h>
 #include <FreeRTOS_ARM.h>
 #include <PowerDueWiFi.h>
-#include <USBCDC.h>
 
 void initNtpServerAddr();
 int getNtpSocket();
@@ -17,15 +17,19 @@ int getNtpSocket();
   void vNtpSlaveReceiveTask(void *arg);
 #endif
 
+#define NTP_SERVER_TASK_NAME "NTPServer"
+#define NTP_SYNC_TIMER_NAME  "NTPSync"
+#define NTP_RECV_TASK_NAME   "NTPRecv" 
+
 // define freertos tasks and timers
 void startSyncTasks(int priority){
   initNtpServerAddr();
 #if MASTER_CLOCK
-  xTaskCreate(vNtpMasterReceiveTask, "NTPServer", configMINIMAL_STACK_SIZE, NULL, priority, NULL);
+  xTaskCreate(vNtpMasterReceiveTask, NTP_SERVER_TASK_NAME, configMINIMAL_STACK_SIZE, NULL, priority, NULL);
 #else
-  TimerHandle_t xNtpTimer = xTimerCreate("NTPSync", pdMS_TO_TICKS(SYNC_FREQUENCY), pdTRUE, 0, vNtpRequestCallback);
+  TimerHandle_t xNtpTimer = xTimerCreate(NTP_SYNC_TIMER_NAME, pdMS_TO_TICKS(SYNC_FREQUENCY), pdTRUE, 0, vNtpRequestCallback);
   xTimerStart(xNtpTimer, portMAX_DELAY);
-  xTaskCreate(vNtpSlaveReceiveTask, "NTPRecv", configMINIMAL_STACK_SIZE, NULL, priority, NULL);
+  xTaskCreate(vNtpSlaveReceiveTask, NTP_RECV_TASK_NAME, configMINIMAL_STACK_SIZE, NULL, priority, NULL);
 #endif
 }
 
@@ -44,7 +48,7 @@ void initNtpServerAddr(){
 #else
   // communicate to MASTER_CLOCK_IP
   if(strlen(MASTER_CLOCK_IP) == 0){
-    SerialUSB.println("Must define MASTER_CLOCK_IP!!!");
+    PRINT_DEBUGLN("ERROR: MUST DEFINE MASTER_CLOCK_IP!!!");
     assert(false);
   }
   inet_pton(AF_INET, MASTER_CLOCK_IP, &(_ntpServer.sin_addr));  
@@ -64,8 +68,8 @@ int getNtpSocket(){
     serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     int sock = lwip_socket(AF_INET, SOCK_DGRAM, 0);
     if (bind(sock, (struct sockaddr *)&serverAddr, sizeof(serverAddr)) < 0) {
-            SerialUSB.println("NTP bind failed");
-            return -1;
+      PRINT_DEBUGLN("ERROR: NTP Socket bind failed!!!");
+      return -1;
     }
     _ntpSocket = sock;
   }
@@ -109,14 +113,14 @@ void vNtpSlaveReceiveTask(void *arg){
     int offset = ((t1-t0) + (t2-t3))/2;
     int delay = ((t3-t0) + (t2-t1))/2;
     
-    SerialUSB2.print("Offset: ");
-    SerialUSB2.print(offset);
-    SerialUSB2.print(" Delay: ");
-    SerialUSB2.println(delay);
+    PRINT_DEBUG("Offset: ");
+    PRINT_DEBUG(offset);
+    PRINT_DEBUG(" Delay: ");
+    PRINT_DEBUGLN(delay);
     
-    if(delay < 400){
-      ADCClock.addOffset(offset);
-    }
+    // adjust the clock based on computed offset an delay
+    // TODO: how do we choose when to adjust our clock?
+    ADCClock.addOffset(offset);
   }
 }
 
@@ -144,10 +148,10 @@ void vNtpMasterReceiveTask(void *arg){
     
     t0 = *((tstamp_t*)&recvBuffer[0]);
     
-    SerialUSB2.print("t0: ");
-    SerialUSB2.print((uint32_t)t0);
-    SerialUSB2.print(" t1: ");
-    SerialUSB2.println((uint32_t)t1);
+    PRINT_DEBUG("t0: ");
+    PRINT_DEBUG((uint32_t)t0);
+    PRINT_DEBUG(" t1: ");
+    PRINT_DEBUGLN((uint32_t)t1);
     
     // get t2
     t2 = ADCClock.getTime();
