@@ -33,11 +33,12 @@
 #if MASTER_CLOCK == 0
   // TODO: If this is a slave clock, this must be defined properly
   // Set this to the IP Address of your Master Clock
-  #define MASTER_CLOCK_IP ""  // e.g. "10.230.12.10"
+  #define MASTER_CLOCK_IP ""    // e.g. "10.230.12.10"
 #endif
 
-// Time period between NTP synchronization trials (in milliseconds)
-#define SYNC_FREQUENCY  10000
+#define SYNC_FREQUENCY  10000   // Time period between NTP synchronization trials (in milliseconds)
+
+#define NTP_TASK_PRIORITY   1   // priority of NTP synchronization tasks
 
 /*
  *  ADCSampler parameters
