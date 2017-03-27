@@ -3,6 +3,11 @@
 
 #include "ADCConfig.h"
 
+/*
+ * A class for performing event detection on a continuous wave signal.
+ * Event detection is performed by simple anomaly detection based on
+ * the gaussian distribution of signal energy of noise.
+ */
 class ADCTrigger
 {
   public:

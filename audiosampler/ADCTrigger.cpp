@@ -1,6 +1,5 @@
 #include "ADCTrigger.h"
 
-#include <USBCDC.h>
 #include <math.h>
 
 ADCTrigger::ADCTrigger(){
@@ -11,8 +10,9 @@ ADCTrigger::ADCTrigger(){
 }
 
 void ADCTrigger::feed(uint16_t *buffer, uint16_t len){
-  // uint32_t t = micros();
-  
+  // TODO: How long does this actually run?
+  // Does it run faster than the buffer filling up?
+
   // get these before updating them
   float meanEnergy = getEnergyMean();
   float stdEnergy = getEnergyStd();
@@ -28,8 +28,6 @@ void ADCTrigger::feed(uint16_t *buffer, uint16_t len){
       _triggerCount++; 
     }
   }
-  
-  // SerialUSB2.println(micros() - t);
 }
 
 bool ADCTrigger::isTriggered(){
