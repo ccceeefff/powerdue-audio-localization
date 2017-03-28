@@ -107,7 +107,6 @@ void BufferHandlerTask(void *arg){
         // we want to send BUFFERS_TO_SEND buffers
         // if this is the first time to trigger, set how many buffers we should count
         if(bufCount == 0){
-          pd_rgb_led(PD_BLUE);
           bufCount = BUFFERS_TO_SEND; // start sending out buffers
           
           // start by sending the previous buffer
@@ -145,7 +144,6 @@ void BufferHandlerTask(void *arg){
           // send out the buffer
           sendPacket(currPacket);
           currPacket = (currPacket+1)%PACKET_BUFFER_COUNT;  
-          pd_rgb_led(PD_RED);
         }
       }
     }
@@ -184,6 +182,9 @@ void TcpStreamOut(void *arg){
       vTaskDelay(pdMS_TO_TICKS(2000)); // wait a bit and try again
     }
     
+    // add led notice here when ready
+    pd_rgb_led(PD_RED);
+    
     uint8_t packetIndex;
     
     // inner loop to handle sending data
@@ -202,6 +203,7 @@ void TcpStreamOut(void *arg){
     // close socket after everything is done
     lwip_close(s);
     lwip_shutdown(s, SHUT_RDWR);
+    pd_rgb_led(PD_OFF);
   }
   
 }
